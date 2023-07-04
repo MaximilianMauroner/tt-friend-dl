@@ -22,6 +22,8 @@ export default function TikTok<P extends TikTokProfile>(
         scope: "user.info.basic",
         response_type: "code",
         client_key: env.TIKTOK_CLIENT_ID,
+        redirect_uri:
+          "https://tt-friend-dl.mauroner.eu/api/auth/callback/tiktok/",
       },
     },
     token: {
