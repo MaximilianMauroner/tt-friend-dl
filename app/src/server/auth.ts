@@ -8,6 +8,7 @@ import {
 import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
 import TikTokProvider from "~/server/providers/tiktok";
+import SpotifyProvider from "next-auth/providers/spotify";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -47,39 +48,6 @@ export const authOptions: NextAuthOptions = {
   },
   adapter: PrismaAdapter(prisma),
   providers: [
-    {
-      id: "tiktok",
-      name: "TikTok",
-      type: "oauth",
-      version: "2.0",
-      clientId: env.TIKTOK_CLIENT_ID,
-      clientSecret: env.TIKTOK_CLIENT_SECRET,
-      authorization: {
-        url: "https://www.tiktok.com/auth/authorize/",
-        params: {
-          scope: "user.info.basic",
-          response_type: "code",
-          client_key: env.TIKTOK_CLIENT_ID,
-        },
-      },
-      redirect_uri: "",
-      token: {
-        url: "https://open-api.tiktok.com/oauth/access_token/",
-        params: {
-          client_key: env.TIKTOK_CLIENT_ID,
-          client_secret: env.TIKTOK_CLIENT_SECRET,
-          grant_type: "authorization_code",
-        },
-      },
-      userinfo: "https://open-api.tiktok.com/user/info/",
-      profile(profile) {
-        return {
-          profile: profile,
-          id: profile.open_id,
-        };
-      },
-      checks: ["state"],
-    },
     /**
      * ...add more providers here.
      *
