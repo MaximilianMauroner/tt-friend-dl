@@ -5,10 +5,9 @@ import {
   type NextAuthOptions,
   type DefaultSession,
 } from "next-auth";
-import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
-import TikTokProvider from "~/server/providers/tiktok";
-import SpotifyProvider from "next-auth/providers/spotify";
+import TikTok from "./providers/tiktok";
+import { env } from "~/env.mjs";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -48,6 +47,10 @@ export const authOptions: NextAuthOptions = {
   },
   adapter: PrismaAdapter(prisma),
   providers: [
+    TikTok({
+      clientId: env.TIKTOK_CLIENT_ID,
+      clientSecret: env.TIKTOK_CLIENT_SECRET,
+    }),
     /**
      * ...add more providers here.
      *

@@ -1,5 +1,5 @@
 import type { OAuthConfig, OAuthUserConfig } from "next-auth/providers";
-import { env } from "process";
+import { env } from "~/env.mjs";
 
 export interface TikTokProfile extends Record<string, any> {
   id: string;
