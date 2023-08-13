@@ -17,7 +17,7 @@ export default function TikTok<P extends TikTokProfile>(
     clientId: env.TIKTOK_CLIENT_ID,
     clientSecret: env.TIKTOK_CLIENT_SECRET,
     authorization: {
-      url: "https://www.tiktok.com/auth/authorize/",
+      url: "https://www.tiktok.com/v2/auth/authorize/",
       params: {
         scope: "user.info.basic",
         response_type: "code",
@@ -26,11 +26,12 @@ export default function TikTok<P extends TikTokProfile>(
       },
     },
     token: {
-      url: "https://open-api.tiktok.com/oauth/access_token/",
+      url: "https://open.tiktokapis.com/v2/oauth/token/",
       params: {
         client_key: env.TIKTOK_CLIENT_ID,
         client_secret: env.TIKTOK_CLIENT_SECRET,
         grant_type: "authorization_code",
+        redirect_uri: env.TIKTOK_REDIRECT_URL,
       },
     },
     userinfo: "https://open-api.tiktok.com/user/info/",
