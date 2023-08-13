@@ -18,12 +18,6 @@ export default function TikTok<P extends TikTokProfile>(
     clientSecret: env.TIKTOK_CLIENT_SECRET,
     authorization: {
       url: "https://www.tiktok.com/v2/auth/authorize/",
-      params: {
-        scope: "user.info.basic",
-        response_type: "code",
-        client_key: env.TIKTOK_CLIENT_ID,
-        redirect_uri: env.TIKTOK_REDIRECT_URL,
-      },
     },
     token: {
       url: "https://open.tiktokapis.com/v2/oauth/token/",
