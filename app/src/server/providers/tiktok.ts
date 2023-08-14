@@ -52,7 +52,7 @@ export default function Tiktok<P extends TiktokProfile>(
       url: "https://www.tiktok.com/v2/auth/authorize",
       params: {
         client_key: options.clientId,
-        scope: "user.info.basic",
+        scope: "user.info.profile",
         response_type: "code",
       },
     },
