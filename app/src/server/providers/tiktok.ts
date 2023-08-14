@@ -42,7 +42,7 @@ type TiktokTokenSet = {
 };
 
 export default function Tiktok<P extends TiktokProfile>(
-  options: OAuthUserConfig<P>
+  options: OAuthUserConfig<P> & { redirect_url: string }
 ): OAuthConfig<P> {
   return {
     id: "tiktok",
@@ -54,6 +54,7 @@ export default function Tiktok<P extends TiktokProfile>(
         client_key: options.clientId,
         scope: "user.info.basic",
         response_type: "code",
+        redirect_uri: options.callbackUrl,
       },
     },
 
