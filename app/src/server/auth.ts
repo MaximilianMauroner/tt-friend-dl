@@ -50,7 +50,6 @@ export const authOptions: NextAuthOptions = {
     TikTok({
       clientId: env.TIKTOK_CLIENT_ID,
       clientSecret: env.TIKTOK_CLIENT_SECRET,
-      redirect_url: env.TIKTOK_REDIRECT_URL,
     }),
 
     /**

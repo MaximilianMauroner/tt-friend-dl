@@ -1,5 +1,6 @@
 import { Awaitable, TokenSet } from "next-auth";
 import type { OAuthConfig, OAuthUserConfig } from "next-auth/providers";
+import { env } from "~/env.mjs";
 
 /** @see https://developers.tiktok.com/doc/tiktok-api-v2-get-user-info/ */
 export interface TiktokProfile extends Record<string, any> {
@@ -42,7 +43,7 @@ type TiktokTokenSet = {
 };
 
 export default function Tiktok<P extends TiktokProfile>(
-  options: OAuthUserConfig<P> & { redirect_url: string }
+  options: OAuthUserConfig<P>
 ): OAuthConfig<P> {
   return {
     id: "tiktok",
@@ -54,7 +55,7 @@ export default function Tiktok<P extends TiktokProfile>(
         client_key: options.clientId,
         scope: "user.info.basic",
         response_type: "code",
-        redirect_uri: options.callbackUrl,
+        redirect_uri: env.TIKTOK_REDIRECT_URL,
       },
     },
 
