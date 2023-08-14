@@ -47,45 +47,11 @@ export const authOptions: NextAuthOptions = {
   },
   adapter: PrismaAdapter(prisma),
   providers: [
-    // TikTok({
-    //   clientId: env.TIKTOK_CLIENT_ID,
-    //   clientSecret: env.TIKTOK_CLIENT_SECRET,
-    // }),
-    {
-      id: "tiktok",
-      name: "TikTok",
-      type: "oauth",
-      version: "2.0",
+    TikTok({
       clientId: env.TIKTOK_CLIENT_ID,
       clientSecret: env.TIKTOK_CLIENT_SECRET,
-      authorization: {
-        url: "https://www.tiktok.com/auth/authorize/",
-        params: {
-          scope: "user.info.basic",
-          response_type: "code",
-          client_key: env.TIKTOK_CLIENT_ID,
-          redirect_uri: env.TIKTOK_REDIRECT_URL,
-        },
-      },
-      token: {
-        url: "https://open-api.tiktok.com/oauth/access_token/",
-        params: {
-          client_key: env.TIKTOK_CLIENT_ID,
-          client_secret: env.TIKTOK_CLIENT_SECRET,
-          grant_type: "authorization_code",
-        },
-      },
-      userinfo: "https://open-api.tiktok.com/user/info/",
-      profile(profile) {
-        return {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          profile: profile,
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-          id: profile.open_id,
-        };
-      },
-      checks: ["state"],
-    },
+    }),
+
     /**
      * ...add more providers here.
      *
