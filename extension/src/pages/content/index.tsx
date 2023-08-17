@@ -10,42 +10,36 @@ if (!rootContainer) throw new Error("Can't find Options root element");
 const root = createRoot(rootContainer);
 
 type VideoType = {
-    id?: string;
-    bgImg: string;
+    link: string;
 };
 const useLoadVideos = (active: boolean) => {
     const [videos, setVideos] = useState<VideoType[]>([]);
-    const [retry, setRetry] = useState<boolean>(false);
+    const [next, setNext] = useState<boolean>(false);
     useEffect(() => {
         if (!active) return;
         console.log("videos", videos);
     }, [videos]);
 
     useEffect(() => {
-        const possibleVideos = document.querySelectorAll(
-            'div[class*="DivVideoContainer"]'
+        const videoLink = document.querySelector(
+            '[data-e2e="browse-video-link"]'
         );
-        const possibleNewVidoes: VideoType[] = [];
-        for (const possibleVideo of possibleVideos) {
-            const vidContainer = (
-                possibleVideo as HTMLDivElement
-            ).querySelector('div[style*="background-image"]') as HTMLDivElement;
-            if (!vidContainer) continue;
-            const bgImg = vidContainer.style.backgroundImage;
-            if (!bgImg || bgImg === 'url("")') continue;
-            if (videos.find((video: VideoType) => video.bgImg === bgImg))
-                continue;
-            possibleNewVidoes.push({
-                bgImg,
-            });
+        if (
+            videoLink &&
+            videos.findIndex((v) => v.link === videoLink.innerHTML) === -1
+        ) {
+            const cleanLink = videoLink.innerHTML.split("?")[0];
+            setVideos((prev) => [...prev, { link: cleanLink }]);
+            const nextButton = document.querySelector(
+                'button[data-e2e="arrow-left"]'
+            ) as HTMLButtonElement;
+            if (nextButton) nextButton.click();
         }
-        if (possibleNewVidoes.length === 0) return;
-        setVideos((prev) => [...prev, ...possibleNewVidoes]);
-    }, [retry]);
+    }, [next]);
 
     if (!active) return null;
     setInterval(() => {
-        setRetry((prev) => !prev);
+        setNext((prev) => !prev);
     }, 300);
 
     return {};
@@ -53,8 +47,11 @@ const useLoadVideos = (active: boolean) => {
 
 const DispalyAside = () => {
     const [inMessage, setInMessage] = useState(false);
-    const [hasOpenMessage, setHasOpenMessage] = useState(false);
+    const [runProcess, setRunProcess] = useState(false);
     setInterval(() => {
+        const videoLink = document.querySelector(
+            '[data-e2e="browse-video-link"]'
+        );
         if (location.pathname == "/messages") {
             if (!inMessage) {
                 setInMessage(true);
@@ -62,23 +59,25 @@ const DispalyAside = () => {
             const videoContentDiv = document.querySelector(
                 'div[class*="DivChatMainContent"]'
             );
-            if (videoContentDiv && !hasOpenMessage) {
-                setHasOpenMessage(true);
-            } else if (videoContentDiv === null && hasOpenMessage) {
-                setHasOpenMessage(false);
+            if (videoContentDiv && !runProcess) {
+                setRunProcess(true);
+            } else if (videoContentDiv === null && runProcess) {
+                setRunProcess(false);
             }
+        } else if (videoLink) {
+            setRunProcess(true);
         } else if (inMessage) {
             setInMessage(false);
         }
     }, 500);
-    useLoadVideos(hasOpenMessage);
+    useLoadVideos(runProcess);
     return (
         <>
             <aside className="absolute inset-y-0 left-0 w-1/3 text-black h-auto dark:text-white bg-gray-300 dark:bg-slate-800 z-[10000] opacity-50 pointer-events-none">
                 <div className="flex justify-center items-center">
                     <span>
                         {inMessage
-                            ? hasOpenMessage
+                            ? runProcess
                                 ? " And now wait"
                                 : "Now Seelect a Chat of which message you want to archive"
                             : "Go to messages"}
