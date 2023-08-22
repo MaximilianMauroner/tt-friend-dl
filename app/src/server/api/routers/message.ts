@@ -43,12 +43,15 @@ export const messagesRouter = createTRPCRouter({
             return input.messages.length;
         }),
     list: publicProcedure.query(async ({ ctx }) => {
+        if (!ctx.session?.user) {
+            return [];
+        }
         return await ctx.prisma.message.findMany({
             orderBy: { created_at: "asc" },
             include: {
                 MessageSeenBy: {
                     where: {
-                        userId: "cllm9shyy0000me083241yzhu",
+                        userId: ctx.session?.user.id,
                     },
                 },
             },
