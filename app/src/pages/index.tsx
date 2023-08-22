@@ -154,7 +154,12 @@ const UploadFile = () => {
 };
 const DisplayMessages = () => {
     const { data, isLoading } = api.messages.list.useQuery();
-    const mutation = api.messages.seen.useMutation();
+    const context = api.useContext();
+    const mutation = api.messages.seen.useMutation({
+        onSuccess() {
+            void context.messages.list.invalidate();
+        },
+    });
     if (isLoading || data?.length == 0) {
         return <div>Loading...</div>;
     }
@@ -184,6 +189,12 @@ const DisplayMessages = () => {
                             <Link
                                 target={"_blank"}
                                 href={message.content}
+                                onClick={() =>
+                                    void mutation.mutate({
+                                        messageId: message.id,
+                                        userId: "cllm9shyy0000me083241yzhu",
+                                    })
+                                }
                                 className="col-span-3 overflow-ellipsis"
                             >
                                 <span>{message.content}</span>
