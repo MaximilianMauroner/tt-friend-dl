@@ -162,11 +162,11 @@ const UploadFile = () => {
 };
 const DisplayMessages = () => {
     const { data: session, status } = useSession();
-    const { data, isLoading } = api.messages.list.useQuery();
+    const { data, refetch, isLoading } = api.messages.list.useQuery();
     const context = api.useContext();
     const mutation = api.messages.seen.useMutation({
         onSuccess() {
-            void context.messages.list.invalidate();
+            void refetch();
         },
     });
     if (isLoading || data?.length == 0 || !session?.user.id) {
