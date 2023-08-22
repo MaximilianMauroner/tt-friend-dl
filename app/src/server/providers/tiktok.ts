@@ -43,7 +43,7 @@ type TiktokTokenSet = {
 };
 
 export default function Tiktok<P extends TiktokProfile>(
-  options: OAuthUserConfig<P>
+  options: OAuthUserConfig<P> & { redirectUrl: string; scope: string }
 ): OAuthConfig<P> {
   return {
     id: "tiktok",
@@ -53,9 +53,9 @@ export default function Tiktok<P extends TiktokProfile>(
       url: "https://www.tiktok.com/v2/auth/authorize",
       params: {
         client_key: options.clientId,
-        scope: "user.info.basic",
+        scope: options.scope,
         response_type: "code",
-        redirect_uri: env.TIKTOK_REDIRECT_URL,
+        redirect_uri: options.redirectUrl,
       },
     },
 
