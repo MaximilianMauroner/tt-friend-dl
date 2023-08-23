@@ -1,11 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { reformattedData } from "~/pages";
-import {
-    createTRPCRouter,
-    protectedProcedure,
-    publicProcedure,
-} from "~/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
 export const messagesRouter = createTRPCRouter({
     import: protectedProcedure
@@ -65,15 +61,13 @@ export const messagesRouter = createTRPCRouter({
             },
             orderBy: { created_at: "asc" },
             include: {
-                MessageSeenBy: {
+                seenBy: {
                     where: {
                         userId: ctx.session?.user.id,
                     },
                 },
                 fromUser: true,
             },
-            take: 1000,
-            skip: 0,
         });
     }),
     seen: protectedProcedure

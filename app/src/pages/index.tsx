@@ -203,21 +203,21 @@ const DisplayMessages = () => {
                                 <span>{message.content}</span>
                             </Link>
                         ) : (
-                            <span>{message.content}</span>
+                            <span className="col-span-3 overflow-ellipsis">
+                                {message.content}
+                            </span>
                         )}
                         <input
+                            checked={message?.seenBy?.length > 0 ?? false}
+                            id="checked-checkbox"
                             type="checkbox"
-                            defaultChecked={
-                                message.MessageSeenBy.findIndex(
-                                    (e) => e.userId == session?.user.id
-                                ) === 0
-                            }
                             onClick={() =>
                                 void mutation.mutate({
                                     messageId: message.id,
                                     userId: session?.user.id,
                                 })
                             }
+                            className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                         />
                     </div>
                 );
