@@ -222,7 +222,49 @@ const SeenBy = ({
     const utils = api.useContext();
     const seenMuation = api.messages.seen.useMutation({
         onSettled() {
+            // Sync with server once mutation has settled
             void utils.messages.list.invalidate();
+        },
+        async onMutate(newPost) {
+            // Cancel outgoing fetches (so they don't overwrite our optimistic update)
+            await utils.messages.list.cancel();
+
+            // Get the data from the queryCache
+            const prevData = utils.messages.list.getData();
+
+            // Optimistically update the data with our new post
+            utils.messages.list.setData(undefined, (old) => {
+                if (message.seenBy.length > 0) {
+                    return old?.map((message) => {
+                        if (message.id === newPost.messageId) {
+                            return {
+                                ...message,
+                                seenBy: [],
+                            };
+                        }
+                        return message;
+                    });
+                } else {
+                    return old?.map((message) => {
+                        if (message.id === newPost.messageId) {
+                            return {
+                                ...message,
+                                seenBy: [
+                                    {
+                                        messageId: message.toUserId,
+                                        seenAt: new Date(),
+                                        userId: message.toUserId,
+                                    },
+                                ],
+                            };
+                        }
+                        return message;
+                    });
+                }
+            });
+
+            // Return the previous data so we can revert if something goes wrong
+            return { prevData };
         },
     });
     return (
