@@ -43,7 +43,7 @@ export const messagesRouter = createTRPCRouter({
                     await ctx.prisma.message.create({
                         data: {
                             content: messsage.Content,
-                            fromUserId: messsage.From,
+                            fromUserId: user?.id,
                             toUserId: ctx.session?.user.id,
                             created_at: new Date(messsage.Date),
                         },
