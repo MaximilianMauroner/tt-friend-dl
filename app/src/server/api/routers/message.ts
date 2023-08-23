@@ -16,13 +16,13 @@ export const messagesRouter = createTRPCRouter({
             }
             const person = input;
             const userName = person.tiktokName;
-            const user = await ctx.prisma.user.findFirst({
+            let user = await ctx.prisma.user.findFirst({
                 where: {
                     name: userName,
                 },
             });
             if (!user) {
-                await ctx.prisma.user.create({
+                user = await ctx.prisma.user.create({
                     data: {
                         name: userName,
                     },
@@ -33,7 +33,7 @@ export const messagesRouter = createTRPCRouter({
                     where: {
                         messageIdentifier: {
                             content: messsage.Content,
-                            fromUserId: messsage.From,
+                            fromUserId: user?.id,
                             toUserId: ctx.session?.user.id,
                             created_at: new Date(messsage.Date),
                         },
