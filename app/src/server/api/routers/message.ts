@@ -1,11 +1,19 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { reformattedData } from "~/pages";
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import {
+    createTRPCRouter,
+    protectedProcedure,
+    publicProcedure,
+} from "~/server/api/trpc";
 
 export const messagesRouter = createTRPCRouter({
-    import: publicProcedure
+    import: protectedProcedure
         .input(reformattedData)
         .mutation(async ({ input, ctx }) => {
+            if (!ctx.session?.user) {
+                throw new TRPCError({ code: "UNAUTHORIZED" });
+            }
             const person = input;
             const userName = person.tiktokName;
             const user = await ctx.prisma.user.findFirst({
@@ -25,7 +33,8 @@ export const messagesRouter = createTRPCRouter({
                     where: {
                         messageIdentifier: {
                             content: messsage.Content,
-                            tiktokUserId: messsage.From,
+                            fromUserId: messsage.From,
+                            toUserId: ctx.session?.user.id,
                             created_at: new Date(messsage.Date),
                         },
                     },
@@ -34,7 +43,8 @@ export const messagesRouter = createTRPCRouter({
                     await ctx.prisma.message.create({
                         data: {
                             content: messsage.Content,
-                            tiktokUserId: messsage.From,
+                            fromUserId: messsage.From,
+                            toUserId: ctx.session?.user.id,
                             created_at: new Date(messsage.Date),
                         },
                     });
@@ -42,11 +52,17 @@ export const messagesRouter = createTRPCRouter({
             }
             return input.messages.length;
         }),
-    list: publicProcedure.query(async ({ ctx }) => {
+    list: protectedProcedure.query(async ({ ctx }) => {
         if (!ctx.session?.user) {
             return [];
         }
         return await ctx.prisma.message.findMany({
+            where: {
+                OR: [
+                    { toUserId: ctx.session?.user.id },
+                    { fromUserId: ctx.session?.user.id },
+                ],
+            },
             orderBy: { created_at: "asc" },
             include: {
                 MessageSeenBy: {
@@ -54,14 +70,18 @@ export const messagesRouter = createTRPCRouter({
                         userId: ctx.session?.user.id,
                     },
                 },
+                fromUser: true,
             },
             take: 1000,
             skip: 0,
         });
     }),
-    seen: publicProcedure
+    seen: protectedProcedure
         .input(z.object({ userId: z.string(), messageId: z.string() }))
         .mutation(async ({ input, ctx }) => {
+            if (!ctx.session?.user) {
+                return [];
+            }
             const seen = await ctx.prisma.messageSeenBy.findFirst({
                 where: {
                     userId: input.userId,

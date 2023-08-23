@@ -42,14 +42,16 @@ model Session {
 }
 
 model User {
-    id            String          @id @default(cuid())
-    name          String?         @unique
-    email         String?         @unique
-    emailVerified DateTime?
-    image         String?
-    accounts      Account[]
-    sessions      Session[]
-    MessageSeenBy MessageSeenBy[]
+    id               String          @id @default(cuid())
+    name             String?         @unique
+    email            String?         @unique
+    emailVerified    DateTime?
+    image            String?
+    accounts         Account[]
+    sessions         Session[]
+    MessageSeenBy    MessageSeenBy[]
+    SentMessages     Message[]       @relation("FromUser")
+    ReceivedMessages Message[]       @relation("ToUser")
 }
 
 model VerificationToken {
@@ -61,14 +63,21 @@ model VerificationToken {
 }
 
 model Message {
-    id            String          @id @default(cuid())
-    content       String
-    tiktokUserId  String
+    id         String @id @default(cuid())
+    content    String
+    fromUserId String
+    toUserId   String
+    fromUser   User   @relation("FromUser", fields: [fromUserId], references: [id], onDelete: Cascade)
+    toUser     User   @relation("ToUser", fields: [toUserId], references: [id], onDelete: Cascade)
+
     created_at    DateTime
-    replyTo       String?
     MessageSeenBy MessageSeenBy[]
 
-    @@unique([content, tiktokUserId, created_at], name: "messageIdentifier")
+    replies   Message[] @relation("replies")
+    replyTo   Message?  @relation("replies", fields: [replyToId], references: [id])
+    replyToId String?   @map("replyToId")
+
+    @@unique([content, fromUserId, toUserId, created_at], name: "messageIdentifier")
 }
 
 model MessageSeenBy {

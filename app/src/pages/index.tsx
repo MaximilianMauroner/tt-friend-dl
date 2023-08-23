@@ -189,7 +189,7 @@ const DisplayMessages = () => {
                                 {message.created_at.toLocaleString()}
                             </span>
                             <span className="text-gray-400">
-                                @{message.tiktokUserId}
+                                @{message?.fromUser?.name ?? "Unknown"}
                             </span>
                         </div>
                         {message.content.includes(
@@ -198,12 +198,6 @@ const DisplayMessages = () => {
                             <Link
                                 target={"_blank"}
                                 href={message.content}
-                                onClick={() =>
-                                    void mutation.mutate({
-                                        messageId: message.id,
-                                        userId: session?.user.id,
-                                    })
-                                }
                                 className="col-span-3 overflow-ellipsis"
                             >
                                 <span>{message.content}</span>
