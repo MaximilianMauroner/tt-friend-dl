@@ -71,14 +71,14 @@ export const messagesRouter = createTRPCRouter({
         });
     }),
     seen: protectedProcedure
-        .input(z.object({ userId: z.string(), messageId: z.string() }))
+        .input(z.object({ messageId: z.string() }))
         .mutation(async ({ input, ctx }) => {
             if (!ctx.session?.user) {
                 return [];
             }
             const seen = await ctx.prisma.messageSeenBy.findFirst({
                 where: {
-                    userId: input.userId,
+                    userId: ctx.session.user.id,
                     messageId: input.messageId,
                 },
             });
@@ -87,17 +87,17 @@ export const messagesRouter = createTRPCRouter({
                     where: {
                         messageId_userId: {
                             messageId: input.messageId,
-                            userId: input.userId,
+                            userId: ctx.session.user.id,
                         },
                     },
                 });
-                return;
+            } else {
+                await ctx.prisma.messageSeenBy.create({
+                    data: {
+                        messageId: input.messageId,
+                        userId: ctx.session.user.id,
+                    },
+                });
             }
-            await ctx.prisma.messageSeenBy.create({
-                data: {
-                    messageId: input.messageId,
-                    userId: input.userId,
-                },
-            });
         }),
 });
