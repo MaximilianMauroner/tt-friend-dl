@@ -1,4 +1,4 @@
-import { HandThumbUpIcon } from "@heroicons/react/24/outline";
+import { HandThumbUpIcon } from "@heroicons/react/24/solid";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
