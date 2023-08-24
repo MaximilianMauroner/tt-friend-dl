@@ -77,7 +77,9 @@ const NavBar = () => {
                         }
                     >
                         <button
-                            onClick={() => setShowUploadModal(true)}
+                            onClick={() =>
+                                setShowUploadModal((current) => !current)
+                            }
                             className={
                                 "bg-slate-00 h-20 w-20 rounded-full border-4 border-slate-800 bg-white text-green-500 "
                             }
