@@ -1,11 +1,11 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-import { reformattedData } from "~/pages";
 import {
     createTRPCRouter,
     protectedProcedure,
     publicProcedure,
 } from "~/server/api/trpc";
+import { reformattedData } from "~/utils/types";
 
 export const messagesRouter = createTRPCRouter({
     import: protectedProcedure
