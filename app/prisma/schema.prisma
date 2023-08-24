@@ -49,9 +49,9 @@ model User {
     image            String?
     accounts         Account[]
     sessions         Session[]
-    MessageSeenBy    MessageSeenBy[]
-    SentMessages     Message[]       @relation("FromUser")
-    ReceivedMessages Message[]       @relation("ToUser")
+    seenMessages     MessageSeenBy[]
+    sentMessages     Message[]       @relation("FromUser")
+    receivedMessages Message[]       @relation("ToUser")
 }
 
 model VerificationToken {
@@ -70,8 +70,8 @@ model Message {
     fromUser   User   @relation("FromUser", fields: [fromUserId], references: [id], onDelete: Cascade)
     toUser     User   @relation("ToUser", fields: [toUserId], references: [id], onDelete: Cascade)
 
-    created_at    DateTime
-    MessageSeenBy MessageSeenBy[]
+    created_at DateTime
+    seenBy     MessageSeenBy[]
 
     replies   Message[] @relation("replies")
     replyTo   Message?  @relation("replies", fields: [replyToId], references: [id])

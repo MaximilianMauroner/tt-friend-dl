@@ -1,13 +1,12 @@
-import { signIn, signOut, useSession } from "next-auth/react";
+import { HandThumbUpIcon } from "@heroicons/react/24/outline";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { z } from "zod";
 import NavBar from "~/components/nav";
-import { api } from "~/utils/api";
+import { type RouterOutputs, api } from "~/utils/api";
 
 export default function Home() {
-    const { status } = useSession({
+    useSession({
         required: process.env.NODE_ENV !== "development",
     });
     return (
@@ -72,25 +71,83 @@ const DisplayMessages = () => {
                                 <span>{message.content}</span>
                             </Link>
                         ) : (
-                            <span>{message.content}</span>
+                            <span className="col-span-3 overflow-ellipsis">
+                                {message.content}
+                            </span>
                         )}
-                        <input
-                            type="checkbox"
-                            defaultChecked={
-                                message.MessageSeenBy.findIndex(
-                                    (e) => e.userId == session?.user.id
-                                ) === 0
-                            }
-                            onClick={() =>
-                                void mutation.mutate({
-                                    messageId: message.id,
-                                    userId: session?.user.id,
-                                })
-                            }
-                        />
+                        <SeenBy message={message} />
                     </div>
                 );
             })}
         </div>
+    );
+};
+const SeenBy = ({
+    message,
+}: {
+    message: RouterOutputs["messages"]["list"]["0"];
+}) => {
+    const utils = api.useContext();
+    const seenMuation = api.messages.seen.useMutation({
+        onSettled() {
+            // Sync with server once mutation has settled
+            void utils.messages.list.invalidate();
+        },
+        async onMutate(newPost) {
+            // Cancel outgoing fetches (so they don't overwrite our optimistic update)
+            await utils.messages.list.cancel();
+
+            // Get the data from the queryCache
+            const prevData = utils.messages.list.getData();
+
+            // Optimistically update the data with our new post
+            utils.messages.list.setData(undefined, (old) => {
+                if (message.seenBy.length > 0) {
+                    return old?.map((message) => {
+                        if (message.id === newPost.messageId) {
+                            return {
+                                ...message,
+                                seenBy: [],
+                            };
+                        }
+                        return message;
+                    });
+                } else {
+                    return old?.map((message) => {
+                        if (message.id === newPost.messageId) {
+                            return {
+                                ...message,
+                                seenBy: [
+                                    {
+                                        messageId: message.toUserId,
+                                        seenAt: new Date(),
+                                        userId: message.toUserId,
+                                    },
+                                ],
+                            };
+                        }
+                        return message;
+                    });
+                }
+            });
+
+            // Return the previous data so we can revert if something goes wrong
+            return { prevData };
+        },
+    });
+    return (
+        <>
+            <button
+                onClick={() =>
+                    void seenMuation.mutate({ messageId: message.id })
+                }
+            >
+                {message.seenBy.length === 0 ? (
+                    <HandThumbUpIcon className="h-5 w-5 text-gray-400" />
+                ) : (
+                    <HandThumbUpIcon className="h-5 w-5 text-green-400" />
+                )}
+            </button>
+        </>
     );
 };
