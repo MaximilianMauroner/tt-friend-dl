@@ -18,7 +18,7 @@ export default function Home() {
             </Head>
             <main
                 className={
-                    "h-screen min-h-full text-gray-900 dark:bg-slate-800 dark:text-gray-200"
+                    "h-full min-h-screen text-gray-900 dark:bg-slate-800 dark:text-gray-200"
                 }
             >
                 <DisplayMessages />
@@ -29,15 +29,8 @@ export default function Home() {
 }
 
 const DisplayMessages = () => {
-    const { data: session, status } = useSession();
-    const { data, refetch, isLoading } = api.messages.list.useQuery();
-    const context = api.useContext();
-    const mutation = api.messages.seen.useMutation({
-        onSuccess() {
-            void refetch();
-        },
-    });
-    if (isLoading || data?.length == 0 || !session?.user.id) {
+    const { data, isLoading } = api.messages.list.useQuery();
+    if (isLoading || data?.length == 0) {
         return <div>Loading...</div>;
     }
     return (
