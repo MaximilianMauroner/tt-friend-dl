@@ -1,4 +1,4 @@
-import { HandThumbUpIcon } from "@heroicons/react/24/solid";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
@@ -136,9 +136,9 @@ const SeenBy = ({
                 }
             >
                 {message.seenBy.length === 0 ? (
-                    <HandThumbUpIcon className="h-10 w-10 text-gray-500" />
+                    <EyeSlashIcon className="h-10 w-10 text-gray-500" />
                 ) : (
-                    <HandThumbUpIcon className="h-10 w-10 text-green-500" />
+                    <EyeIcon className="h-10 w-10 text-green-500" />
                 )}
             </button>
         </>
