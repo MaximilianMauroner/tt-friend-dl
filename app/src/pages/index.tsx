@@ -38,7 +38,7 @@ const DisplayMessages = () => {
             {data?.map((message, index) => {
                 return (
                     <div
-                        className="grid w-full grid-cols-5 gap-1 p-2"
+                        className="grid w-full grid-cols-5 gap-1 border-b border-gray-200 p-2 dark:border-gray-700"
                         key={
                             message.created_at.toLocaleString() +
                             "_" +
