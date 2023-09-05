@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Local Archive - myfaveTT</title>
+		<link
+			rel="icon"
+			href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADSElEQVRYhe2XXWscVRjHf2fOvOxsN7slyzYYsY0IVtRclX4DL0pJEYt4p2hBQfwE4pVe+wH0wlKRelOQ3gpSKSgUrVq3idXSJrEbpdmk7luym9l5OXJmdmvSySzedLcX/cOzzJ7zf87zf57znDMMjyGE0DXQP2eAq0APUA/JeoMYOpbI5XIMg597iEGz7NwgNq9nEMZhb+gtuDxBAZcxTbO+z8S4rG4EQZCb1EmUUubM3QMH33sX6/AcYb8XyxMplwTCsgk26nS/uUTh5VMYrksUBMlcip3AcFx2lhbZ+vyL+2OmmYRvD8v97L11Na+UmlJKFUZYSSnlhD3F22+qilLqmRHcoZWVUvz6456tdRynvacCG60WR6cP8SWg9yXqb0HgJ3np+8Itxs86y6jxD+GBWaoEXMHkk3jVENXtDFZT4Dgg80kFgGAnxJ8+xllvjYvb60kVdgvYunYNlGRBl1MHnJkGx04WixSsrIDnw4E81P6GsEB58Qa3XYuXfAF5B2bKoBQIA9rbsF4DaSTiaw2ovMDSve7+AvzTr7GsH+ZOQS4PFz6AF+f1DMrbhjMfIqqr8ORsEiBfpPfVO9Q3bkL+OJw8Buc/gtBD6cy/+wlOv4+YOZSsZ+ikKqiW/K8PHmwWfVdebK7iWjZChZSA48PmMiRt3+P7jVtxhaRb4Nv2XWr9bb6OVjE6s0QIjiA4OmxJaXGr2+Bm5y8MKZE7m/zca2YL0Dv4SvP6YBsDngOqgKX/F4r8LvqcvPtLqstPBH9AoxTv9lvA2ViwAaVpPm1W+bi5nPIZ9kYmbASV3ZNKYYlsF1vacaVKe3wipmQqz+wK7IYkrTDrnBPzBdE+PsYIr+x0xoTHAh5tAaJcJrkyLHCKybHSN2IGhG0ni0o3IUzlIYr2Jw8w8hREi0t4ytSvLej3wA/AlCnefX6ng7rzJz4hOAehtp74Zh+C0QJ2TiywJh2s+VfByoGd4+nZJ6CRoib8Kz/AkTm80mF4fgH6XXhqjsrtOynu/xKg0Qo9zq9dx5IWwnVZ9lopzoOotja5sHKViABZKHJpq57iaPi+HxdHz1ZSs+PBpm7CGxMKrvGbFvBZanh8iGNP9sNkkp9mE6z8owLgX2zIA0l1aUwxAAAAAElFTkSuQmCC"
+		/>
+		<style>
+			body {
+				font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+					'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+				background-color: #333;
+			}
+			.splash {
+				height: 40vh;
+				display: grid;
+				justify-items: center;
+				align-items: end;
+			}
+			.splash h1.logo {
+				font-size: 40px;
+				width: max-content;
+				white-space: nowrap;
+			}
+			.splash .logo .myfave {
+				font-weight: 500;
+				color: #eee;
+			}
+			.splash .logo .tt {
+				display: inline-grid;
+				grid-template-areas: 'only';
+				font-weight: 700;
+				opacity: 96%;
+			}
+			.splash .logo .blue,
+			.splash .logo .red {
+				grid-area: only;
+				position: relative;
+			}
+			.splash .logo .blue {
+				top: -0.03em;
+				left: -0.03em;
+				color: rgb(0, 240, 240);
+			}
+			.splash .logo .red {
+				top: 0.03em;
+				left: 0.03em;
+				color: #fe2d52;
+				mix-blend-mode: lighten;
+			}
+			footer.crash.hidden {
+				display: none;
+			}
+			footer.crash {
+				color: silver;
+				display: grid;
+				place-items: center;
+			}
+			footer.crash summary {
+				cursor: pointer;
+				width: fit-content;
+			}
+			footer.crash li {
+				margin: 0.5em 0;
+			}
+			footer.crash .grey {
+				color: grey;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="archive">
+			<div class="splash">
+				<h1 class="logo">
+					<span class="myfave">myfave</span
+					><span class="tt">
+						<span class="blue">TT</span>
+						<span class="red">TT</span>
+					</span>
+				</h1>
+			</div>
+			<footer class="crash hidden">
+				<details>
+					<summary>Having an issue?</summary>
+					<p>If your're stuck at this view, something is wrong in the archive.</p>
+					<ul>
+						<li>Try to run the extension again in browser, it may auto fix the archive.</li>
+						<li>
+							If the archive isn't immediately fixed, but download seems to be running normally,
+							wait till the run is complete and check again.
+						</li>
+						<li>
+							You can restore the archive to a previous good state by opening your folder > data >
+							.appdata > backups. Follow the instructions in there.
+							<br />
+							<span class="grey">Note: the ".appdata" folder may be hidden on Mac and Linux.</span>
+						</li>
+						<li>
+							If nothing works, you could contact the extension author: <br />
+							open the browser "console" by pressing Shift+Ctrl+J (or Command+Option+J on Mac), copy
+							all the error message, and email to info@myfavett.com.
+						</li>
+					</ul>
+				</details>
+			</footer>
+		</div>
+		<script>
+			setTimeout(() => {
+				document.querySelector('footer.crash')?.classList?.remove('hidden');
+			}, 2.5e3);
+		</script>
+		<script src="data/.appdata/db.js"></script>
+		<script src="data/.appdata/dba.js"></script>
+		<script src="data/.appdata/dbv.js"></script>
+		<script src="data/.appdata/dbvd.js"></script>
+		<script src="data/.appdata/dbf.js"></script>
+		<script src="data/.appdata/dbb.js"></script>
+		<script src="data/.appdata/app.js"></script>
+	</body>
+</html>

@@ -1,0 +1,1 @@
+db=String.raw`{"schemaVersion":7,"user":{"uid":"kwA8lCpawZ3","id":"7022210877031203845","uniqueId":"thearizn","nickname":"TheArizn"},"likes":{"downloadStatus":"unset","officialList":[],"downloaded":[],"total":0,"numDisappeared":0,"lastRun":{"start":0,"finish":0}}}`;
